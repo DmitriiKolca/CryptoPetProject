@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./ERC721Facet.sol";
+import {NftStats} from "./StorageFacet.sol";
 
 contract MintFacet is ERC721Facet {
     event NftMinted (uint256 nftId);

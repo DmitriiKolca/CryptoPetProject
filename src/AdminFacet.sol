@@ -2,6 +2,7 @@ pragma solidity ^0.8.0;
 
 import "../lib/diamond-3-hardhat/contracts/libraries/LibDiamond.sol";
 import {ERC721Facet} from "./ERC721Facet.sol";
+import {Admins, GameStorage} from "./StorageFacet.sol";
 
 contract AdminFacet is ERC721Facet{
     event AdminAdded(address indexed newAdmin);
