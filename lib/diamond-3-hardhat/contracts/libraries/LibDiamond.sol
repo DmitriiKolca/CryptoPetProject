@@ -189,14 +189,14 @@ library LibDiamond {
             return;
         }
         enforceHasContractCode(_init, "LibDiamondCut: _init address has no code");        
-        (bool success, bytes memory error) = _init.delegatecall(_calldata);
+        (bool success, bytes memory err) = _init.delegatecall(_calldata);
         if (!success) {
-            if (error.length > 0) {
-                // bubble up error
+            if (err.length > 0) {
+                // bubble up err
                 /// @solidity memory-safe-assembly
                 assembly {
-                    let returndata_size := mload(error)
-                    revert(add(32, error), returndata_size)
+                    let returndata_size := mload(err)
+                    revert(add(32, err), returndata_size)
                 }
             } else {
                 revert InitializationFunctionReverted(_init, _calldata);
