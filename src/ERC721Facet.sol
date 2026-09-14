@@ -12,12 +12,12 @@ contract ERC721Facet is StorageFacet {
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
     event URI(string value, uint256 indexed id);
 
-    function name() external pure returns(string memory collectionName){
+    function name() external view returns(string memory collectionName){
         GameStorage storage gameStore = getStorage();
         return gameStore.name;
     }
 
-    function symbol() external pure returns (string memory collectionSymbol) {
+    function symbol() external view returns (string memory collectionSymbol) {
         GameStorage storage gameStore = getStorage();
         return gameStore.symbol;
     }
