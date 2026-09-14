@@ -28,7 +28,7 @@ contract ERC721Facet is StorageFacet {
     }
 
     function ownerOf(uint256 _tokenId) external view returns (address) {
-        address owner = getStorage().nftOwners[_tokenId];
+        address owner = getStorage().nftStats[_tokenId].owner;
         require(owner != address(0), "ERC721: invalid token ID");
         return owner;
     }

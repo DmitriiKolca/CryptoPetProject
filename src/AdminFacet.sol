@@ -43,7 +43,7 @@ contract AdminFacet is ERC721Facet{
 
     function setCustomURIByAdmin(uint256 _tokenId, string calldata _newURI) external {
         GameStorage storage gameStore = getStorage();
-        require(gameStore.nftStats[_tokenId].customURI != address(0), "ERC721: token does not exist");
+        require(gameStore.nftStats[_tokenId].owner != address(0), "ERC721: token does not exist");
 
         Admins storage adminsStore = getAdmins();
         require(adminsStore.adminList[msg.sender], "Caller is not Admin");
