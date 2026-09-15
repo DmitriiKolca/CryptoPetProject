@@ -12,18 +12,7 @@ struct NftStats {
 }
 
 struct GameStorage {
-    uint256 lastNftId;
-    string name;    // Название коллекции
-    string symbol;  // Символ коллекции
-    string baseTokenURI;
-
     mapping(uint256 nftId => NftStats stats) nftStats;
-    mapping(address userAddress => uint256[] nftIds) userNfts;
-    mapping(uint256 nftId => uint256 index) nftOwnedIndex;
-
-    // СТАНДАРТ ERC-721: Необходимы для работы маркетплейсов
-    mapping(uint256 nftId => address approved) nftApprovals;
-    mapping(address owner => mapping(address operator => bool)) operatorApprovals;
 }
 
 struct Admins {
