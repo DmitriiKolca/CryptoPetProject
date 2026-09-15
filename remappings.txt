@@ -1,1 +1,2 @@
 forge-std/=lib/forge-std/src/
+@solidstate-network/contracts/=lib/solidstate-solidity/contracts/

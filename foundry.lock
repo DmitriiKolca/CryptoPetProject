@@ -4,5 +4,11 @@
       "name": "v1.16.2",
       "rev": "bf647bd6046f2f7da30d0c2bf435e5c76a780c1b"
     }
+  },
+  "lib\\solidstate-solidity": {
+    "tag": {
+      "name": "v0.0.61",
+      "rev": "03fb235059c8426976c0a3cadcf176a10df23ebe"
+    }
   }
 }
