@@ -212,7 +212,6 @@ contract AdminFacetTest is Test {
     }
     function test_setCustomNftURIByAdmin_ShouldRevert_WhenNotAdmin() public {
         vm.startPrank(alien);
-        uint256 nftId = 1;
         mintFacetAsDiamond.mint();
 
         vm.expectRevert("Caller is not Admin");
