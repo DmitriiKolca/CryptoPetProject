@@ -1,0 +1,19 @@
+{
+  "name": "diamond-foundry",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:DmitriiKolca/CryptoPetProject.git",
+  "author": "Dmitrii <dkolca70@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "ethers": "^6.17.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  },
+  "scripts": {
+    "start": "anvil",
+    "test": "forge test",
+    "deploy_diamond": "tsx ./script/deploy.ts"
+  }
+}
