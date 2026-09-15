@@ -70,7 +70,7 @@ contract DeployDiamondScript is Script {
     }
 
     function getMintSelectors() internal pure returns (bytes4[] memory) {
-        bytes4[] memory selectors = new bytes4[](11);
+        bytes4[] memory selectors = new bytes4[](12);
         selectors[0] = MintFacet.mint.selector;
         selectors[1] = bytes4(keccak256("balanceOf(address)"));
         selectors[2] = bytes4(keccak256("ownerOf(uint256)"));
@@ -82,6 +82,7 @@ contract DeployDiamondScript is Script {
         selectors[8] = bytes4(keccak256("setApprovalForAll(address,bool)"));
         selectors[9] = bytes4(keccak256("isApprovedForAll(address,address)"));
         selectors[10] = bytes4(keccak256("tokenURI(uint256)"));
+        selectors[11] = MintFacet.getNft.selector;
         return selectors;
     }
 }

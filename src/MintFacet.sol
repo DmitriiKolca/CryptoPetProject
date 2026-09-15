@@ -31,6 +31,12 @@ contract MintFacet is SolidStateERC721, StorageFacet {
         return newId;
     }
 
+    function getNft(uint256 _nftId) external view returns(NftStats memory _nft){
+        if (!_exists(_nftId)) revert ERC721Base__NonExistentToken();
+
+        return getStorage().nftStats[_nftId];
+    }
+
     function tokenURI(
         uint256 tokenId
     ) public view virtual override(ERC721Metadata, IERC721Metadata) returns (string memory) {
