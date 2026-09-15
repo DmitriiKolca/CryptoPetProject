@@ -48,6 +48,26 @@ contract MintFacetTest is Test {
         assertEq(firstNftStats.losses, 0);
     }
 
+    /*  Tests for getWalletNftIds function */
+    function test_getWalletNftIds_ShouldReturnEmptyArray_WhenUserHaveNotNfts() public {
+        uint256[] memory initialNfts = mintFacetAsDiamond.getWalletNftIds(user1);
+        assertEq(initialNfts.length, 0);
+    }
+    function test_getWalletNftIds_ShouldReturnCorrectArray_WhenUserHaveNfts() public {
+        vm.startPrank(user1);
+        uint256 id1 = mintFacetAsDiamond.mint();
+        uint256 id2 = mintFacetAsDiamond.mint();
+        uint256 id3 = mintFacetAsDiamond.mint();
+        vm.stopPrank();
+
+        uint256[] memory playerNfts = mintFacetAsDiamond.getWalletNftIds(user1);
+
+        assertEq(playerNfts.length, 3);
+        assertEq(playerNfts[0], id1);
+        assertEq(playerNfts[1], id2);
+        assertEq(playerNfts[2], id3);
+    }
+
     /*  Tests for mint function */
     function test_mint_Success_And_StatsInitialization() public {
         vm.prank(user1);
