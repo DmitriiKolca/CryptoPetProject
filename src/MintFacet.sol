@@ -8,16 +8,32 @@ import {IERC721Metadata} from "@solidstate-network/contracts/token/ERC721/metada
 import {ERC721MetadataStorage} from "@solidstate-network/contracts/token/ERC721/metadata/ERC721MetadataStorage.sol";
 
 contract MintFacet is SolidStateERC721, StorageFacet {
-    event NftMinted(uint256 indexed nftId, address indexed owner);
+    event NftMinted(uint256 indexed uniqueOmniId, address indexed owner);
 
-    function mint() external returns(uint256 nftId){
+    function mint() external returns(uint256){
         uint256 newId = totalSupply() + 1;
-        _mint(msg.sender, newId);
+
 
         GameStorage storage gameStore = getStorage();
         string memory uniqueNick = string.concat("Nft_", _toString(newId));
 
-        gameStore.nftStats[newId] = NftStats({
+        uint256 uniqueOmniId = uint256(
+            keccak256(
+                abi.encodePacked(
+                    block.chainid,
+                    msg.sender,
+                    totalSupply()
+                )
+            )
+        );
+
+        _mint(msg.sender, uniqueOmniId);
+
+        gameStore.nftStats[uniqueOmniId] = NftStats({
+            omnichainId: uniqueOmniId,
+            uiId: newId,
+            originChainId: block.chainid,
+            creator: msg.sender,
             owner: msg.sender,
             nickName: uniqueNick,
             customURI: "",
@@ -27,14 +43,14 @@ contract MintFacet is SolidStateERC721, StorageFacet {
             totalPrizeTokens: 0
         });
 
-        emit NftMinted(newId, msg.sender);
-        return newId;
+        emit NftMinted(uniqueOmniId, msg.sender);
+        return uniqueOmniId;
     }
 
-    function getNft(uint256 _nftId) external view returns(NftStats memory _nft){
-        if (!_exists(_nftId)) revert ERC721Base__NonExistentToken();
+    function getNft(uint256 _uniqueOmniId) external view returns(NftStats memory _nft){
+        if (!_exists(_uniqueOmniId)) revert ERC721Base__NonExistentToken();
 
-        return getStorage().nftStats[_nftId];
+        return getStorage().nftStats[_uniqueOmniId];
     }
 
     function getWalletNftIds(address _user) external view returns (uint256[] memory) {
@@ -54,12 +70,12 @@ contract MintFacet is SolidStateERC721, StorageFacet {
     }
 
     function tokenURI(
-        uint256 tokenId
+        uint256 uniqueOmniId
     ) public view virtual override(ERC721Metadata, IERC721Metadata) returns (string memory) {
-        if (!_exists(tokenId)) revert ERC721Base__NonExistentToken();
+        if (!_exists(uniqueOmniId)) revert ERC721Base__NonExistentToken();
 
         GameStorage storage gameStore = getStorage();
-        string memory customUri = gameStore.nftStats[tokenId].customURI;
+        string memory customUri = gameStore.nftStats[uniqueOmniId].customURI;
 
         if (bytes(customUri).length > 0) {
             return customUri;
@@ -67,10 +83,10 @@ contract MintFacet is SolidStateERC721, StorageFacet {
 
         string memory base = ERC721MetadataStorage.metadataLayout().baseURI;
         if (bytes(base).length == 0) {
-            return _toString(tokenId); // Если baseURI вообще пустой, возвращаем просто ID в виде строки
+            return _toString(uniqueOmniId); // Если baseURI вообще пустой, возвращаем просто ID в виде строки
         }
 
-        return string.concat(base, "_", _toString(tokenId));
+        return string.concat(base, "_", _toString(uniqueOmniId));
     }
 
     function _toString(uint256 value) internal pure returns (string memory) {

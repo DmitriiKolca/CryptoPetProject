@@ -72,11 +72,15 @@ contract MintFacetTest is Test {
     function test_mint_Success_And_StatsInitialization() public {
         vm.prank(user1);
         uint256 firstTokenId = mintFacetAsDiamond.mint();
-        assertEq(firstTokenId, 1);
         assertEq(mintFacetAsDiamond.ownerOf(firstTokenId), user1);
         assertEq(mintFacetAsDiamond.balanceOf(user1), 1);
 
         NftStats memory firstNftStats = mintFacetAsDiamond.getNft(firstTokenId);
+
+        assertEq(firstNftStats.omnichainId, firstTokenId);
+        assertEq(firstNftStats.uiId, 1);
+        assertEq(firstNftStats.originChainId, block.chainid);
+        assertEq(firstNftStats.creator, user1);
         assertEq(firstNftStats.owner, user1);
         assertEq(firstNftStats.ratingPoints, 100);
         assertEq(firstNftStats.wins, 0);
@@ -84,12 +88,15 @@ contract MintFacetTest is Test {
 
         vm.prank(user2);
         uint256 secondTokenId = mintFacetAsDiamond.mint();
-        assertEq(secondTokenId, 2);
         assertEq(mintFacetAsDiamond.ownerOf(secondTokenId), user2);
         assertEq(mintFacetAsDiamond.balanceOf(user1), 1);
         assertEq(mintFacetAsDiamond.balanceOf(user2), 1);
 
         NftStats memory secondNftStats = mintFacetAsDiamond.getNft(secondTokenId);
+        assertEq(secondNftStats.omnichainId, secondTokenId);
+        assertEq(secondNftStats.uiId, 2);
+        assertEq(secondNftStats.originChainId, block.chainid);
+        assertEq(secondNftStats.creator, user2);
         assertEq(secondNftStats.owner, user2);
         assertEq(secondNftStats.ratingPoints, 100);
         assertEq(secondNftStats.wins, 0);

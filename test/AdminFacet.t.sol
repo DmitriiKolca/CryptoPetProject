@@ -178,11 +178,9 @@ contract AdminFacetTest is Test {
         vm.stopPrank();
     }
     function test_setBaseURI_ShouldReturnBaseUri() public {
-        uint256 nftId = 1;
-        mintFacetAsDiamond.mint();
+        uint256 nftId = mintFacetAsDiamond.mint();
         string memory initUriFromScript = "https://avatars.mds.yandex.net/i?id=2730c6b9a82576cad8ea336decd83f47945a5c53-12373036-images-thumbs&n=13";
-        string memory nftIdPostfix = "_1";
-        string memory resultNftUri = string.concat(initUriFromScript, nftIdPostfix);
+        string memory resultNftUri = string.concat(initUriFromScript, "_", vm.toString(nftId));
 
         string memory baseTokenUri = mintFacetAsDiamond.tokenURI(nftId);
         console.log("base_init_uri", resultNftUri);
@@ -190,15 +188,14 @@ contract AdminFacetTest is Test {
         assertEq(baseTokenUri, resultNftUri);
     }
     function test_setBaseURI_ShouldReturnUpdateBaseUri() public {
-        uint256 nftId = 1;
-        mintFacetAsDiamond.mint();
+        uint256 nftId = mintFacetAsDiamond.mint();
 
         vm.prank(owner);
         adminFacetAsDiamond.setBaseURI("https://mygame.com");
 
         string memory actualTokenUri = mintFacetAsDiamond.tokenURI(nftId);
         console.log("actual_URI", actualTokenUri);
-        assertEq(actualTokenUri, "https://mygame.com_1");
+        assertEq(actualTokenUri, string.concat("https://mygame.com", "_", vm.toString(nftId)));
     }
 
     /*  Tests for setCustomNftURIByAdmin function */
@@ -212,22 +209,21 @@ contract AdminFacetTest is Test {
     }
     function test_setCustomNftURIByAdmin_ShouldRevert_WhenNotAdmin() public {
         vm.startPrank(alien);
-        mintFacetAsDiamond.mint();
+        uint256 omnichainId = mintFacetAsDiamond.mint();
 
         vm.expectRevert("Caller is not Admin");
-        adminFacetAsDiamond.setCustomNftURIByAdmin(1,"https://custom_uri.com");
+        adminFacetAsDiamond.setCustomNftURIByAdmin(omnichainId,"https://custom_uri.com");
 
         vm.stopPrank();
     }
     function test_setCustomNftURIByAdmin_ShouldSuccess() public {
-        uint256 nftId = 1;
-        mintFacetAsDiamond.mint();
+        uint256 omnichainId = mintFacetAsDiamond.mint();
         string memory customUri = "https://custom_uri.com";
 
         vm.prank(owner);
-        adminFacetAsDiamond.setCustomNftURIByAdmin(nftId,customUri);
+        adminFacetAsDiamond.setCustomNftURIByAdmin(omnichainId,customUri);
 
-        string memory actualTokenUri = mintFacetAsDiamond.tokenURI(nftId);
+        string memory actualTokenUri = mintFacetAsDiamond.tokenURI(omnichainId);
         console.log("actual_URI", actualTokenUri);
         assertEq(actualTokenUri, customUri);
     }

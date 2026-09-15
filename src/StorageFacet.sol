@@ -1,6 +1,11 @@
 pragma solidity ^0.8.0;
 
 struct NftStats {
+    uint256 omnichainId;
+    uint256 uiId;
+    uint256 originChainId;
+    address creator;
+
     address owner;
     string nickName;
     string customURI;
@@ -12,7 +17,7 @@ struct NftStats {
 }
 
 struct GameStorage {
-    mapping(uint256 nftId => NftStats stats) nftStats;
+    mapping(uint256 omnichainId => NftStats stats) nftStats;
 }
 
 struct Admins {
