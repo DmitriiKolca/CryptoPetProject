@@ -49,7 +49,7 @@ contract MintFacetTest is Test {
     }
 
     /*  Tests for getWalletNftIds function */
-    function test_getWalletNftIds_ShouldReturnEmptyArray_WhenUserHaveNotNfts() public {
+    function test_getWalletNftIds_ShouldReturnEmptyArray_WhenUserHaveNotNfts() public view {
         uint256[] memory initialNfts = mintFacetAsDiamond.getWalletNftIds(user1);
         assertEq(initialNfts.length, 0);
     }
@@ -70,8 +70,20 @@ contract MintFacetTest is Test {
 
     /*  Tests for mint function */
     function test_mint_Success_And_StatsInitialization() public {
+        uint256 expectedTotalSupply = mintFacetAsDiamond.totalSupply();
+        uint256 expectedOmniId = uint256(
+            keccak256(
+                abi.encodePacked(
+                    block.chainid,
+                    user1,
+                    expectedTotalSupply
+                )
+            )
+        );
+
         vm.prank(user1);
         uint256 firstTokenId = mintFacetAsDiamond.mint();
+        assertEq(firstTokenId, expectedOmniId, "Generated tokenId matches formula");
         assertEq(mintFacetAsDiamond.ownerOf(firstTokenId), user1);
         assertEq(mintFacetAsDiamond.balanceOf(user1), 1);
 

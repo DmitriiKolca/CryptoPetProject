@@ -24,6 +24,11 @@ struct Admins {
     mapping(address userAddresss => bool isAdmin) adminList;
 }
 
+struct Omnichain {
+    address lzEndpoint; // Адрес контракта LayerZero Endpoint V2 в этой сети
+    mapping(uint32 destinationEndpointId  => bytes32 trustedDiamondPeer) trustedPeers; // Доверенные контракты Diamond в других сетях
+}
+
 contract StorageFacet {
     bytes32 private constant STORAGE_GAME_FACET_POSITION = keccak256("diamond.game.facet.position");
 
@@ -43,5 +48,15 @@ contract StorageFacet {
             adminStore.slot := position
         }
         return adminStore;
+    }
+
+    bytes32 private constant STORAGE_OMNICHAIN_FACET_POSITION = keccak256("diamond.omnichain.facet.position");
+
+    function getOmnichainStore() internal pure returns(Omnichain storage omnichainStore){
+        bytes32 position = STORAGE_OMNICHAIN_FACET_POSITION;
+        assembly{
+            omnichainStore.slot := position
+        }
+        return omnichainStore;
     }
 }

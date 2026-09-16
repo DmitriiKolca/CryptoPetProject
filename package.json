@@ -13,7 +13,8 @@
   },
   "scripts": {
     "start": "anvil",
-    "test": "forge test",
+    "build": "forge build",
+    "test": "forge test -v",
     "deploy_diamond": "tsx ./script/deploy.ts"
   }
 }

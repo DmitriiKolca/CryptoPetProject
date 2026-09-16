@@ -8,7 +8,7 @@ import {ERC721MetadataStorage} from "@solidstate-network/contracts/token/ERC721/
 import {ERC165BaseStorage} from "@solidstate-network/contracts/introspection/ERC165/base/ERC165BaseStorage.sol";
 
 contract InitFacet is StorageFacet {
-    function init(string memory _name, string memory _symbol, string memory _baseUri) external {
+    function init(string memory _name, string memory _symbol, string memory _baseUri, address _endpoint) external {
         LibDiamond.enforceIsContractOwner();
         address contractOwner = LibDiamond.contractOwner();
 
@@ -25,5 +25,7 @@ contract InitFacet is StorageFacet {
         erc165Layout.supportedInterfaces[0x80ac58cd] = true; // ERC721 interface ID
         erc165Layout.supportedInterfaces[0x5b5e139f] = true; // ERC721Metadata interface ID
 
+        Omnichain storage omnichainStore = getOmnichainStore();
+        omnichainStore.lzEndpoint = _endpoint;
     }
 }
