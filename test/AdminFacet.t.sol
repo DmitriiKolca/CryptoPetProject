@@ -179,11 +179,10 @@ contract AdminFacetTest is Test {
     }
     function test_setBaseURI_ShouldReturnBaseUri() public {
         uint256 nftId = mintFacetAsDiamond.mint();
-        string memory initUriFromScript = "https://avatars.mds.yandex.net/i?id=2730c6b9a82576cad8ea336decd83f47945a5c53-12373036-images-thumbs&n=13";
+        string memory initUriFromScript = "https://test.com";
         string memory resultNftUri = string.concat(initUriFromScript, "_", vm.toString(nftId));
 
         string memory baseTokenUri = mintFacetAsDiamond.tokenURI(nftId);
-        console.log("base_init_uri", resultNftUri);
 
         assertEq(baseTokenUri, resultNftUri);
     }
@@ -194,7 +193,6 @@ contract AdminFacetTest is Test {
         adminFacetAsDiamond.setBaseURI("https://mygame.com");
 
         string memory actualTokenUri = mintFacetAsDiamond.tokenURI(nftId);
-        console.log("actual_URI", actualTokenUri);
         assertEq(actualTokenUri, string.concat("https://mygame.com", "_", vm.toString(nftId)));
     }
 
@@ -224,7 +222,6 @@ contract AdminFacetTest is Test {
         adminFacetAsDiamond.setCustomNftURIByAdmin(omnichainId,customUri);
 
         string memory actualTokenUri = mintFacetAsDiamond.tokenURI(omnichainId);
-        console.log("actual_URI", actualTokenUri);
         assertEq(actualTokenUri, customUri);
     }
 }
